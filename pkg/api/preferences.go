@@ -47,7 +47,14 @@ func (hs *HTTPServer) SetHomeDashboard(c *models.ReqContext) response.Response {
 	return response.Success("Home dashboard set")
 }
 
-// GET /api/user/preferences
+// swagger:route GET /user/preferences user_preferences getUserPreferences
+//
+// Get user preferences.
+//
+// Responses:
+// 200: getPreferencesResponse
+// 401: unauthorisedError
+// 500: internalServerError
 func (hs *HTTPServer) GetUserPreferences(c *models.ReqContext) response.Response {
 	return hs.getPreferencesFor(c.Req.Context(), c.OrgId, c.UserId, 0)
 }
@@ -88,7 +95,17 @@ func (hs *HTTPServer) getPreferencesFor(ctx context.Context, orgID, userID, team
 	return response.JSON(http.StatusOK, &dto)
 }
 
-// PUT /api/user/preferences
+// swagger:route PUT /user/preferences user_preferences updateUserPreferences
+//
+// Update user preferences.
+//
+// Omitting a key (`theme`, `homeDashboardId`, `timezone`) will cause the current value to be replaced with the system default value.
+//
+// Responses:
+// 200: okResponse
+// 400: badRequestError
+// 401: unauthorisedError
+// 500: internalServerError
 func (hs *HTTPServer) UpdateUserPreferences(c *models.ReqContext) response.Response {
 	dtoCmd := dtos.UpdatePrefsCmd{}
 	if err := web.Bind(c.Req, &dtoCmd); err != nil {
@@ -133,7 +150,15 @@ func (hs *HTTPServer) updatePreferencesFor(ctx context.Context, orgID, userID, t
 	return response.Success("Preferences updated")
 }
 
-// PATCH /api/user/preferences
+// swagger:route PATCH /user/preferences user_preferences patchUserPreferences
+//
+// Patch user preferences.
+//
+// Responses:
+// 200: okResponse
+// 400: badRequestError
+// 401: unauthorisedError
+// 500: internalServerError
 func (hs *HTTPServer) PatchUserPreferences(c *models.ReqContext) response.Response {
 	dtoCmd := dtos.PatchPrefsCmd{}
 	if err := web.Bind(c.Req, &dtoCmd); err != nil {
@@ -251,4 +276,24 @@ type AddOrgUserResponse struct {
 		// example: Data source added
 		Message string `json:"message"`
 	} `json:"body"`
+}
+
+// swagger:parameters updateUserPreferences updateOrgPreferences updateTeamPreferences
+type UpdateUserPreferencesParam struct {
+	// in:body
+	// required:true
+	Body dtos.UpdatePrefsCmd `json:"body"`
+}
+
+// swagger:response getPreferencesResponse
+type GetPreferencesResponse struct {
+	// in:body
+	Body dtos.Prefs `json:"body"`
+}
+
+// swagger:parameters patchUserPreferences patchOrgPreferences patchTeamPreferences
+type PatchUserPreferencesParam struct {
+	// in:body
+	// required:true
+	Body dtos.PatchPrefsCmd `json:"body"`
 }
