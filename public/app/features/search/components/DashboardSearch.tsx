@@ -41,7 +41,7 @@ export function DashboardSearch({ onCloseSearch }: Props) {
           <div>
             <input
               type="text"
-              placeholder={includePanels ? 'Search dashboards and panels by name' : '11111Search dashboards by name'}
+              placeholder={includePanels ? 'Search dashboards and panels by name' : 'Search dashboards by name'}
               value={inputValue}
               onChange={onSearchQueryChange}
               onKeyDown={onKeyDown}

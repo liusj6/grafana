@@ -54,7 +54,7 @@ export const ForgottenPassword: FC = () => {
           >
             <Input
               id="user-input"
-              placeholder="李宇聪的Email or username"
+              placeholder="Email or username"
               {...register('userOrEmail', { required: 'Email or username is required' })}
             />
           </Field>
